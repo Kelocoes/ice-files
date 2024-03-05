@@ -1,0 +1,16 @@
+<state>
+  <timestamp value='1709649313478' />
+  <sourceSet name='default'>
+    <source name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\Printer.ice'>
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\client\build\generated-src\Demo\Response.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\client\build\generated-src\Demo\Callback.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\client\build\generated-src\Demo\Printer.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\client\build\generated-src\Demo\CallbackPrx.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\client\build\generated-src\Demo\_CallbackPrxI.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\client\build\generated-src\Demo\PrinterPrx.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\client\build\generated-src\Demo\_PrinterPrxI.java' />
+    </source>
+    <arg value='C:\Program Files\ZeroC\Ice-3.7.10\\bin\slice2java.exe' />
+    <arg value='-IC:\Program Files\ZeroC\Ice-3.7.10\\slice' />
+  </sourceSet>
+</state>
