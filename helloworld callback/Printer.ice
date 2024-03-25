@@ -1,13 +1,14 @@
 module Demo
 {
     class Response{
-        long responseTime;
         string value;
+        long time;
     }
 
     interface Callback{
         void callbackClient(Response res);
     }
+
 // Se usa asterizco porque no se refiere a Callback sino al proxy de Callback creado por ice
     interface Printer
     {
