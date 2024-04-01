@@ -1,11 +1,16 @@
-// import java.util.concurrent.Semaphore;
+// import concurrent.Semaphore;
 
 // import com.zeroc.IceInternal.ThreadPool;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.ArrayList;
 
+import Demo.CallbackPrx;
 import Demo.Response;
+
+import com.zeroc.Ice.Current;
 
 public class PrinterI implements Demo.Printer {
     // ThreadPool ca;
@@ -15,19 +20,36 @@ public class PrinterI implements Demo.Printer {
     private static final String ipconfigCommand = "ifconfig";
     private static final String nmapCommand = "nmap";
     private static final String doCommand = "!";
+    private static final String listClientsCommand = "list clients";
+    private static final String broadcastCommand = "BC";
 
-    public synchronized void printString(String s, Demo.CallbackPrx callback, com.zeroc.Ice.Current current) {
+    private List<String> callbackClientsList;
+    private List<Demo.CallbackPrx> callbackPrxList;
+
+    PrinterI() {
+        callbackClientsList = new ArrayList<>();
+        callbackPrxList = new ArrayList<>();
+    }
+
+    public void subscribe(String s, CallbackPrx callback, Current current) {
+        System.out.println(s);
+        System.out.println(callback);
+        this.callbackClientsList.add(s);
+        this.callbackPrxList.add(callback);
+    }
+
+    public synchronized void printString(String s, CallbackPrx callback, Current current) {
         new Thread(() -> {
             try {
                 long start = System.currentTimeMillis();
-                System.out.println(s);
+                // System.out.println(s);
                 int index = s.indexOf(" ");
                 String message = s.substring(index + 1);
                 String serverResponse = message;
 
                 try {
                     serverResponse = checkIfNaturalNumber(s, Integer.parseInt(message));
-                    Thread.sleep(5000);
+                    // Thread.sleep(5000);
                 } catch (NumberFormatException e) {
                     serverResponse = handleNonNumericInput(s, message);
                 }
@@ -74,6 +96,11 @@ public class PrinterI implements Demo.Printer {
             output = handleListPortsCommand(s, message);
         } else if (message.startsWith(doCommand)) {
             output = printCommand(message.substring(1).split("\\s+"));
+        } else if (message.startsWith(listClientsCommand)) {
+            output = "Clients: " + callbackClientsList.toString();
+        } else if (message.startsWith(broadcastCommand)) {
+            BroadCastMessage(s, message);
+            output = "Broadcasting message to all clients";
         } else {
             output = message;
         }
@@ -109,6 +136,18 @@ public class PrinterI implements Demo.Printer {
             return printCommand(new String[] { nmapCommand, ip });
         } else {
             return message;
+        }
+    }
+
+    private void BroadCastMessage(String s, String message) {
+        int index = message.indexOf(" ");
+        message = message.substring(index + 1);
+        for (int i = 0; i < callbackPrxList.size(); i++) {
+            try {
+                callbackPrxList.get(i).callbackClient(new Response("Broadcast: " + message, 0));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

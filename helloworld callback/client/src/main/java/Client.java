@@ -1,19 +1,22 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.zeroc.Ice.ObjectPrx;
 import com.zeroc.Ice.Util;
+import com.zeroc.Ice.Communicator;
+import com.zeroc.Ice.ObjectAdapter;
+import com.zeroc.Ice.ObjectPrx;
 
 import Demo.CallbackPrx;
 import Demo.Response;
 
 public class Client {
     public static void main(String[] args) {
-        java.util.List<String> extraArgs = new java.util.ArrayList<>();
+        java.util.List<String> extraArgs = new ArrayList<>();
 
-        try (com.zeroc.Ice.Communicator communicator = com.zeroc.Ice.Util.initialize(args, "config.client",
-                extraArgs)) {
+        try (Communicator communicator = Util.initialize(args, "config.client", extraArgs)) {
             // com.zeroc.Ice.ObjectPrx base =
             // communicator.stringToProxy("SimplePrinter:default -p 10000");
             Demo.PrinterPrx service = Demo.PrinterPrx.checkedCast(communicator.propertyToProxy("Printer.Proxy"));
@@ -22,28 +25,31 @@ public class Client {
                 throw new Error("Invalid proxy");
             }
 
-            com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("Callback");
+            String user = System.getProperty("user.name");
+            String hostname = "";
+            try {
+                hostname = execReadToString("hostname").trim();
+            } catch (IOException e) {
+                hostname = "null";
+            }
+
+            ObjectAdapter adapter = communicator.createObjectAdapter("Callback");
             CallbackImp callbackImp = new CallbackImp();
             ObjectPrx obprx = adapter.add(callbackImp, Util.stringToIdentity("callbackClient"));
             adapter.activate();
 
+            CallbackPrx prx = CallbackPrx.uncheckedCast(obprx);
+            service.subscribe(user + ":" + hostname, prx);
+
             Scanner scanner = new Scanner(System.in);
             while (true) {
 
-                CallbackPrx prx = CallbackPrx.uncheckedCast(obprx);
+                prx = CallbackPrx.uncheckedCast(obprx);
 
                 String line = scanner.nextLine();
                 if (line.equals("exit")) {
                     scanner.close();
                     break;
-                }
-
-                String user = System.getProperty("user.name");
-                String hostname = "";
-                try {
-                    hostname = execReadToString("hostname").trim();
-                } catch (IOException e) {
-                    hostname = "null";
                 }
 
                 service.printString(user + ":" + hostname + " " + line, prx);

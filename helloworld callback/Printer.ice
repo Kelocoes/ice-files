@@ -13,6 +13,8 @@ module Demo
     interface Printer
     {
         void printString(string s, Callback* callback);
+
+        void subscribe(string s, Callback* callback);
     }
 
 }

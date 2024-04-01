@@ -6,9 +6,9 @@ public class CallbackImp implements Demo.Callback {
 
     @Override
     public void callbackClient(Response response, Current current) {
-        System.out.println("Respuesta del server: " + response.value);
-        System.out.println("Tiempo de respuesta: " + response.time + " ms");
-        System.out.println("Callback invoke");
+        System.out.println("Server response: " + response.value);
+        // System.out.println("Tiempo de respuesta: " + response.time + " ms");
+        // System.out.println("Callback invoke");
     }
 
 }
