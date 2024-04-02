@@ -3,5 +3,5 @@ Printer.Proxy=SimplePrinter:tcp -p 9099
 
 #Callback.Endpoints=tcp -p 9098
 
-Ice.Default.Host=10.147.19.250
+Ice.Default.Host=10.147.19.138
 Ice.ThreadPool.Server.Size=1000
