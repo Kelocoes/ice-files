@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import Demo.CallbackPrx;
 import Demo.Response;
@@ -22,39 +24,32 @@ public class PrinterI implements Demo.Printer {
     private static final String doCommand = "!";
     private static final String listClientsCommand = "list clients";
     private static final String broadcastCommand = "BC";
+    private static final String sendMessageCommand = "to";
 
-    private List<String> callbackClientsList;
-    private List<Demo.CallbackPrx> callbackPrxList;
+    Map<String, Demo.CallbackPrx> callbackClientsList = new HashMap<>();
 
     PrinterI() {
-        callbackClientsList = new ArrayList<>();
-        callbackPrxList = new ArrayList<>();
+        callbackClientsList = new HashMap<>();
     }
 
     public void subscribe(String s, CallbackPrx callback, Current current) {
-        System.out.println(s);
-        System.out.println(callback);
-        this.callbackClientsList.add(s);
-        this.callbackPrxList.add(callback);
+        this.callbackClientsList.put(s, callback);
     }
 
     public synchronized void printString(String s, CallbackPrx callback, Current current) {
         new Thread(() -> {
             try {
                 long start = System.currentTimeMillis();
-                // System.out.println(s);
                 int index = s.indexOf(" ");
                 String message = s.substring(index + 1);
                 String serverResponse = message;
 
                 try {
                     serverResponse = checkIfNaturalNumber(s, Integer.parseInt(message));
-                    // Thread.sleep(5000);
                 } catch (NumberFormatException e) {
                     serverResponse = handleNonNumericInput(s, message);
                 }
 
-                // System.out.println(serverResponse);
                 callback.callbackClient(new Response(serverResponse, System.currentTimeMillis() - start));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -97,10 +92,12 @@ public class PrinterI implements Demo.Printer {
         } else if (message.startsWith(doCommand)) {
             output = printCommand(message.substring(1).split("\\s+"));
         } else if (message.startsWith(listClientsCommand)) {
-            output = "Clients: " + callbackClientsList.toString();
+            output = "Clients: " +  callbackClientsList.keySet().toString();
         } else if (message.startsWith(broadcastCommand)) {
             BroadCastMessage(s, message);
             output = "Broadcasting message to all clients";
+        } else if (message.startsWith(sendMessageCommand)) {
+            output = SendMessageToClient(s, message);
         } else {
             output = message;
         }
@@ -142,12 +139,38 @@ public class PrinterI implements Demo.Printer {
     private void BroadCastMessage(String s, String message) {
         int index = message.indexOf(" ");
         message = message.substring(index + 1);
-        for (int i = 0; i < callbackPrxList.size(); i++) {
+        for (String client : callbackClientsList.keySet()) {
             try {
-                callbackPrxList.get(i).callbackClient(new Response("Broadcast: " + message, 0));
+                callbackClientsList.get(client).callbackClient(new Response("Broadcast: " + message, 0));
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private String SendMessageToClient(String s, String message) {
+        String sender = s.substring(0, s.indexOf(" "));
+        String[] parts = message.split(":");
+        if (parts.length == 3) {
+            String userName = parts[0].substring(3) + ":" + parts[1];
+            String messageToSend = parts[2];
+            System.out.println("Sending message to " + userName + " from " + sender + ": " + messageToSend);
+            boolean found = false;
+            if (callbackClientsList.containsKey(userName)) {
+                try {
+                    callbackClientsList.get(userName)
+                            .callbackClient(new Response("Message from " + sender + ":" + messageToSend, 0));
+                    found = true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (!found) {
+                return "User not found";
+            }
+            return "Message sent to " + userName;
+        } else {
+            return "Not valid format";
         }
     }
 }
