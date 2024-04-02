@@ -10,8 +10,10 @@ public class PrinterI implements Demo.Printer {
     private static final String ipconfigCommand = "ifconfig";
     private static final String nmapCommand = "nmap";
     private static final String doCommand = "!";
+    private long time = 0;
 
     public Response printString(String s, com.zeroc.Ice.Current current) {
+        long start = System.currentTimeMillis();
         System.out.println(s);
         int index = s.indexOf(" ");
         String message = s.substring(index + 1);
@@ -25,6 +27,8 @@ public class PrinterI implements Demo.Printer {
 
         System.out.println(serverResponse);
 
+        time = time + (System.currentTimeMillis() - start);
+        System.out.println("Tiempo de respuesta: " + time + "ms" + "\n");
         return new Response(serverResponse);
     }
 

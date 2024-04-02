@@ -17,6 +17,7 @@ public class Client {
                 throw new Error("Invalid proxy");
             }
 
+            /*
             Scanner scanner = new Scanner(System.in);
             while (true) {
                 String line = scanner.nextLine();
@@ -35,6 +36,17 @@ public class Client {
                 System.out.println("Tiempo de respuesta:");
                 System.out.println(responsetTime+ "ms" + "\n");
             }
+            */
+
+            String user = System.getProperty("user.name");
+            String hostname = execReadToString("hostname").trim();
+            long start = System.currentTimeMillis();
+            response = service.printString(user + ":" + hostname + " " + "15000");
+            Long responsetTime = System.currentTimeMillis() - start;
+            //System.out.println("Respuesta del servidor:");
+            //System.out.println(response.value);
+            System.out.println("Tiempo de respuesta:");
+            System.out.println(responsetTime+ "ms" + "\n");
         }
     }
 
