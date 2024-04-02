@@ -34,7 +34,6 @@ public class Client {
             }
 
             ObjectAdapter adapter = communicator.createObjectAdapterWithEndpoints("Callback", "tcp -p " + args[0] + " -h " + args[1]);
-            //ObjectAdapter adapter = communicator.createObjectAdapter("Callback");
             CallbackImp callbackImp = new CallbackImp();
             ObjectPrx obprx = adapter.add(callbackImp, Util.stringToIdentity("callbackClient"));
             adapter.activate();
