@@ -1,14 +1,14 @@
 <state>
-  <timestamp value='1709649315239' />
+  <timestamp value='1713283292506' />
   <sourceSet name='default'>
-    <source name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\Printer.ice'>
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\server\build\generated-src\Demo\Response.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\server\build\generated-src\Demo\Callback.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\server\build\generated-src\Demo\Printer.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\server\build\generated-src\Demo\CallbackPrx.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\server\build\generated-src\Demo\_CallbackPrxI.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\server\build\generated-src\Demo\PrinterPrx.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\helloworld-ret\server\build\generated-src\Demo\_PrinterPrxI.java' />
+    <source name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\Printer.ice'>
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\server\build\generated-src\Demo\Response.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\server\build\generated-src\Demo\Callback.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\server\build\generated-src\Demo\Printer.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\server\build\generated-src\Demo\CallbackPrx.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\server\build\generated-src\Demo\_CallbackPrxI.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\server\build\generated-src\Demo\PrinterPrx.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\server\build\generated-src\Demo\_PrinterPrxI.java' />
     </source>
     <arg value='C:\Program Files\ZeroC\Ice-3.7.10\\bin\slice2java.exe' />
     <arg value='-IC:\Program Files\ZeroC\Ice-3.7.10\\slice' />

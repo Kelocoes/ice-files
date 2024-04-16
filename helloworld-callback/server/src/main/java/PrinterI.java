@@ -59,6 +59,9 @@ public class PrinterI implements Demo.Printer {
 
     private static String checkIfNaturalNumber(String s, int n) {
         if (n > 0) {
+            if (n > 75) {
+                return "El número es muy grande para calcular la serie de fibonacci";
+            }
             StringBuilder series = new StringBuilder();
             long[] fibonacciArray = new long[n];
             for (int i = 0; i < n; i++) {
