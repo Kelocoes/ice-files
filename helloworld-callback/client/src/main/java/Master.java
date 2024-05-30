@@ -12,7 +12,7 @@ import com.zeroc.Ice.ObjectPrx;
 import Demo.CallbackPrx;
 import Demo.Response;
 
-public class Client {
+public class Master {
     public static void main(String[] args) {
         java.util.List<String> extraArgs = new ArrayList<>();
 
