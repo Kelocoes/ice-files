@@ -1,23 +1,22 @@
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import com.zeroc.Ice.Util;
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.ObjectAdapter;
 import com.zeroc.Ice.ObjectPrx;
 
-import Demo.CallbackPrx;
-import Demo.Response;
+import Demo.WorkerPrx;
 
 public class Worker {
     public static void main(String[] args) {
         java.util.List<String> extraArgs = new ArrayList<>();
 
         try (Communicator communicator = Util.initialize(args, "config.worker", extraArgs)) {
-            Demo.PrinterPrx service = Demo.PrinterPrx.checkedCast(communicator.propertyToProxy("Master.Proxy"));
+            Demo.MasterPrx service = Demo.MasterPrx.checkedCast(communicator.propertyToProxy("Master.Proxy"));
 
             if (service == null) {
                 throw new Error("Invalid proxy");
@@ -33,23 +32,12 @@ public class Worker {
             }
 
             ObjectAdapter adapter = communicator.createObjectAdapterWithEndpoints("Callback", "tcp -p " + args[0] + " -h " + args[1]);
-            CallbackImp callbackImp = new CallbackImp();
-            ObjectPrx obprx = adapter.add(callbackImp, Util.stringToIdentity("callbackClient"));
+            WorkerImp workerImp = new WorkerImp();
+            ObjectPrx obprx = adapter.add(workerImp, Util.stringToIdentity("Worker"));
             adapter.activate();
 
-            CallbackPrx prx = CallbackPrx.uncheckedCast(obprx);
+            WorkerPrx prx = WorkerPrx.uncheckedCast(obprx);
             service.connectToMaster(user + ":" + hostname, prx);
-
-            Scanner scanner = new Scanner(System.in);
-            while (true) {
-                String line = scanner.nextLine();
-                if (line.equals("exit")) {
-                    scanner.close();
-                    break;
-                }
-
-                service.printString(user + ":" + hostname + " " + line, prx);
-            }
 
             communicator.waitForShutdown();
         }
