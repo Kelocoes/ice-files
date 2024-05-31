@@ -13,8 +13,7 @@ public class WorkerImp implements Demo.Worker {
         System.out.println("Task received: " + Function + " " + start + " " + end);
 
         try {
-            CtClass ctClass = createClassWithMethod(Function);
-            double result = ApplyFunction(ctClass);
+            double result = ApplyFunction(Function);
             System.out.println("Result: " + result);
             classNumber++;
         } catch (Exception e) {
@@ -22,7 +21,8 @@ public class WorkerImp implements Demo.Worker {
         }
     }
 
-    private double ApplyFunction(CtClass ctClass) throws Exception {
+    private double ApplyFunction(String Function) throws Exception {
+        CtClass ctClass = createClassWithMethod(Function);
         Class<?> clazz = ctClass.toClass();
         Object obj = clazz.getDeclaredConstructor().newInstance();
         java.lang.reflect.Method method = clazz.getMethod("apply", double.class);
