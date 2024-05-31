@@ -1,0 +1,6 @@
+
+Master.Proxy=MasterObject:tcp -p 9099
+
+#Callback.Endpoints=tcp -p 9098
+
+Ice.Default.Host=localhost

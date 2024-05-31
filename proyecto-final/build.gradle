@@ -33,6 +33,7 @@ subprojects {
     //
     dependencies {
         implementation 'com.zeroc:ice:3.7.6'
+        implementation 'org.javassist:javassist:3.29.0-GA'
     }
  
     //

@@ -2,7 +2,7 @@ module Demo
 {
     interface Worker
     {
-        void getTask(string Function, long start, long end, long time);
+        void getTask(string Function, double start, double end);
 
         void connectionResponse(string msg);
     }

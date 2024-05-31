@@ -1,14 +1,13 @@
 <state>
-  <timestamp value='1713803051365' />
+  <timestamp value='1717174447301' />
   <sourceSet name='default'>
-    <source name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\Printer.ice'>
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\client\build\generated-src\Demo\Response.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\client\build\generated-src\Demo\Callback.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\client\build\generated-src\Demo\Printer.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\client\build\generated-src\Demo\CallbackPrx.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\client\build\generated-src\Demo\_CallbackPrxI.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\client\build\generated-src\Demo\PrinterPrx.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\helloworld-callback\client\build\generated-src\Demo\_PrinterPrxI.java' />
+    <source name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\Project.ice'>
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\Worker.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\Master.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\WorkerPrx.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\_WorkerPrxI.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\MasterPrx.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\_MasterPrxI.java' />
     </source>
     <arg value='C:\Program Files\ZeroC\Ice-3.7.10\\bin\slice2java.exe' />
     <arg value='-IC:\Program Files\ZeroC\Ice-3.7.10\\slice' />
