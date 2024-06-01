@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.List;
 
 import com.zeroc.Ice.Util;
 import com.zeroc.Ice.Communicator;
@@ -13,10 +14,10 @@ import Demo.WorkerPrx;
 
 public class Worker {
     public static void main(String[] args) {
-        java.util.List<String> extraArgs = new ArrayList<>();
+        List<String> extraArgs = new ArrayList<>();
 
         try (Communicator communicator = Util.initialize(args, "config.worker", extraArgs)) {
-            Demo.MasterPrx service = Demo.MasterPrx.checkedCast(communicator.propertyToProxy("Master.Proxy"));
+            MasterPrx service = MasterPrx.checkedCast(communicator.propertyToProxy("Master.Proxy"));
 
             if (service == null) {
                 throw new Error("Invalid proxy");

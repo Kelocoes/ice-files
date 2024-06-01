@@ -2,11 +2,15 @@ import com.zeroc.Ice.Util;
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.ObjectAdapter;
 import com.zeroc.Ice.ObjectPrx;
+
 import Demo.MasterPrx;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Master {
     public static void main(String[] args) {
-        java.util.List<String> extraArgs = new java.util.ArrayList<String>();
+        List<String> extraArgs = new ArrayList<String>();
 
         try (Communicator communicator = Util.initialize(args, "config.master", extraArgs)) {
             if (!extraArgs.isEmpty()) {
@@ -21,8 +25,8 @@ public class Master {
             ObjectPrx obprx = adapter.add(masterImp, Util.stringToIdentity("MasterObject"));
             adapter.activate();
 
-            MasterPrx prx = MasterPrx.uncheckedCast(obprx);
-            masterImp.setMasterPrx(prx);
+            MasterPrx masterPrx = MasterPrx.uncheckedCast(obprx);
+            masterImp.setMasterPrx(masterPrx);
             masterImp.readCommandLine();
 
             communicator.waitForShutdown();
