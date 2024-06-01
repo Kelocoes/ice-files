@@ -8,6 +8,7 @@ import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.ObjectAdapter;
 import com.zeroc.Ice.ObjectPrx;
 
+import Demo.MasterPrx;
 import Demo.WorkerPrx;
 
 public class Worker {
@@ -36,7 +37,8 @@ public class Worker {
             adapter.activate();
 
             WorkerPrx prx = WorkerPrx.uncheckedCast(obprx);
-            service.connectToMaster(user + ":" + hostname, prx);
+            MasterPrx masterPrx = service.connectToMaster(user + ":" + hostname, prx);
+            workerImp.setMasterPrx(masterPrx);
 
             communicator.waitForShutdown();
         }

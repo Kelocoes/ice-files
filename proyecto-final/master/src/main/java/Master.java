@@ -1,9 +1,8 @@
-import Demo.MasterPrx;
-
 import com.zeroc.Ice.Util;
-import com.zeroc.Ice.ObjectPrx;
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.ObjectAdapter;
+import com.zeroc.Ice.ObjectPrx;
+import Demo.MasterPrx;
 
 public class Master {
     public static void main(String[] args) {
@@ -19,9 +18,11 @@ public class Master {
 
             ObjectAdapter adapter = communicator.createObjectAdapter("Master");
             MasterImp masterImp = new MasterImp();
-            adapter.add(masterImp, Util.stringToIdentity("MasterObject"));
+            ObjectPrx obprx = adapter.add(masterImp, Util.stringToIdentity("MasterObject"));
             adapter.activate();
 
+            MasterPrx prx = MasterPrx.uncheckedCast(obprx);
+            masterImp.setMasterPrx(prx);
             masterImp.readCommandLine();
 
             communicator.waitForShutdown();
