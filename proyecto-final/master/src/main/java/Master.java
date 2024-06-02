@@ -3,7 +3,7 @@ import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.ObjectAdapter;
 import com.zeroc.Ice.ObjectPrx;
 
-import Demo.MasterPrx;
+import Demo.ManageTaskPrx;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +21,14 @@ public class Master {
             }
 
             ObjectAdapter adapter = communicator.createObjectAdapter("Master");
-            MasterImp masterImp = new MasterImp();
-            ObjectPrx obprx = adapter.add(masterImp, Util.stringToIdentity("MasterObject"));
+            ManageTask manageTask = new ManageTask();
+            ObjectPrx obprx = adapter.add(manageTask, Util.stringToIdentity("ManageTask"));
             adapter.activate();
 
-            MasterPrx masterPrx = MasterPrx.uncheckedCast(obprx);
-            masterImp.setMasterPrx(masterPrx);
-            masterImp.readCommandLine();
+            ManageTaskPrx manageTaskPrx = ManageTaskPrx.uncheckedCast(obprx);
+            manageTask.setManageTaskPrx(manageTaskPrx);
+            CLI cli = new CLI();
+            cli.readCommandLine(manageTask);
 
             communicator.waitForShutdown();
         }

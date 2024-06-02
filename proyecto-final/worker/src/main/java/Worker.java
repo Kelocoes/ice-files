@@ -9,7 +9,7 @@ import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.ObjectAdapter;
 import com.zeroc.Ice.ObjectPrx;
 
-import Demo.MasterPrx;
+import Demo.ManageTaskPrx;
 import Demo.WorkerPrx;
 
 public class Worker {
@@ -17,7 +17,7 @@ public class Worker {
         List<String> extraArgs = new ArrayList<>();
 
         try (Communicator communicator = Util.initialize(args, "config.worker", extraArgs)) {
-            MasterPrx service = MasterPrx.checkedCast(communicator.propertyToProxy("Master.Proxy"));
+            ManageTaskPrx service = ManageTaskPrx.checkedCast(communicator.propertyToProxy("Master.Proxy"));
 
             if (service == null) {
                 throw new Error("Invalid proxy");
@@ -38,8 +38,8 @@ public class Worker {
             adapter.activate();
 
             WorkerPrx prx = WorkerPrx.uncheckedCast(obprx);
-            MasterPrx masterPrx = service.connectToMaster(user + ":" + hostname, prx);
-            workerImp.setMasterPrx(masterPrx);
+            ManageTaskPrx ManageTaskPrx = service.connectWorker(user + ":" + hostname, prx);
+            workerImp.setManageTaskPrx(ManageTaskPrx);
 
             communicator.waitForShutdown();
         }

@@ -1,2 +1,2 @@
-Master.Proxy=MasterObject:tcp -p 9099
+Master.Proxy=ManageTask:tcp -p 9099
 Ice.Default.Host=localhost

@@ -26,7 +26,6 @@ public class ThreadPool {
         double division = range / numThreads;
         double finalResult = 0;
         ArrayList<Double> results = new ArrayList<Double>();
-        System.out.println(range + " " + division + " " + numThreads + " " + cantNum + " " + function);
 
         Class<?> dynamicClass = createDynamicClassWithMethod(function);
         Object instance = dynamicClass.getDeclaredConstructor().newInstance();
@@ -73,7 +72,7 @@ public class ThreadPool {
     private Class<?> createDynamicClassWithMethod(String function) throws CannotCompileException, Exception{
         ctClass = ClassPool.getDefault().makeClass("MyClass" + classNumber);
         ctClass.addMethod(CtMethod.make("public double apply(double x) { return " + function + " ; }", ctClass));
-        Class<?> dynamicClass = ctClass.toClass();
+        Class<?> dynamicClass = ctClass.toClass(this.getClass());
         return dynamicClass;
     }
 }
