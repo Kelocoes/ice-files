@@ -4,9 +4,13 @@ import Demo.ManageTaskPrx;
 import Demo.WorkerPrx;
 
 public class WorkerImp implements Demo.Worker {
-    private ThreadPool threadPool = new ThreadPool();
+    private ThreadPool threadPool;
     ManageTaskPrx manageTaskPrx;
     String workerId;
+
+    public WorkerImp() {
+        this.threadPool = new ThreadPool();
+    }
 
     public void connectionResponse(String msg, Current current) {
         System.out.println(msg);
@@ -19,6 +23,11 @@ public class WorkerImp implements Demo.Worker {
     public void setWorkerId(String workerId) {
         this.workerId = workerId;
         System.out.println("Worker saved");
+    }
+
+    public void closeWorker(Current current) {
+        System.out.println("Worker disconnected");
+        System.exit(0);
     }
 
     public void getTask(String Function, double start, double end, int cantNum, int taskIndex, Current current) {

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
 
 import Demo.WorkerPrx;
 import Demo.ManageTaskPrx;
@@ -28,6 +29,16 @@ public class ManageTask implements Demo.ManageTask {
         System.out.println("Worker " + s + " connected");
         worker.connectionResponse("Connected to the Master");
         return manageTaskPrx;
+    }
+
+    public void disconnectWorker(String workerId, Current current) {
+        for (Map.Entry<String, WorkerDetails> entry : callbackWorkersList) {
+            if (entry.getKey().equals(workerId)) {
+                callbackWorkersList.remove(entry);
+                System.out.println("Worker " + workerId + " disconnected");
+                break;
+            }
+        }
     }
 
     public Thread sendIntegral(String function, double initialPoint, double finalPoint, int workers, int cantNum) {
@@ -95,5 +106,20 @@ public class ManageTask implements Demo.ManageTask {
                 break;
             }
         }
+    }
+
+    public void closeWorkers() {
+        for (Iterator<Map.Entry<String, WorkerDetails>> iterator = callbackWorkersList.iterator(); iterator.hasNext();) {
+            Map.Entry<String, WorkerDetails> entry = iterator.next();
+            WorkerDetails workerDetails = entry.getValue();
+            System.out.println("Disconnecting worker " + entry.getKey());
+            iterator.remove();
+            try {
+                workerDetails.getWorkerPrx().closeWorker();
+            } catch (Exception e) {
+                continue;
+            }
+        }
+        System.exit(0);
     }
 }

@@ -42,6 +42,11 @@ public class Worker {
             ManageTaskPrx ManageTaskPrx = service.connectWorker(workerId, prx);
             workerImp.setWorkerId(workerId);
             workerImp.setManageTaskPrx(ManageTaskPrx);
+            
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                System.out.println("Disconnecting worker from master");
+                ManageTaskPrx.disconnectWorker(workerId);
+            }));
 
             communicator.waitForShutdown();
         }

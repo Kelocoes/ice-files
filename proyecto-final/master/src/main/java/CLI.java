@@ -1,8 +1,14 @@
 import java.util.Scanner;
 
 public class CLI {
+
+    public void removeWorkers(ManageTask manageTask) {
+        manageTask.closeWorkers();
+    }
+
     public void readCommandLine(ManageTask manageTask) {
         Scanner scanner = new Scanner(System.in);
+
         while (true) {
             try {
                 String line = scanner.nextLine();
@@ -42,6 +48,7 @@ public class CLI {
                 System.out.println("You have made a mistake, please try again.");
             }
         }
+        removeWorkers(manageTask);
     }
 
     public boolean validateFields(ManageTask manageTask, String function, double initialPoint, double finalPoint, int workers, int cantNum) {
