@@ -9,10 +9,10 @@ import com.zeroc.Ice.Current;
 
 public class ManageTask implements Demo.ManageTask {
 
-    List<Map.Entry<String, WorkerPrx>> callbackWorkersList = new ArrayList<>();
+    List<Map.Entry<String, WorkerDetails>> callbackWorkersList = new ArrayList<>();
     ManageTaskPrx manageTaskPrx;
-    double partialResults = 0;
-    long totalTime = 0;
+    int taskIndex = 0;
+    List<Map.Entry<Double, Long>> partialResults = new ArrayList<>();
 
     ManageTask() {
         callbackWorkersList = new ArrayList<>();
@@ -24,33 +24,76 @@ public class ManageTask implements Demo.ManageTask {
     }
 
     public ManageTaskPrx connectWorker(String s, WorkerPrx worker, Current current) {
-        callbackWorkersList.add(new java.util.AbstractMap.SimpleEntry<>(s, worker));
+        callbackWorkersList.add(new java.util.AbstractMap.SimpleEntry<>(s, new WorkerDetails(worker, false)));
         System.out.println("Worker " + s + " connected");
         worker.connectionResponse("Connected to the Master");
         return manageTaskPrx;
     }
 
-    public void sendIntegral(String function, double initialPoint, double finalPoint, int workers, int cantNum) {
-        new Thread(() -> {
+    public Thread sendIntegral(String function, double initialPoint, double finalPoint, int workers, int cantNum) {
+        Thread thread = new Thread(() -> {
+            partialResults.add(new java.util.AbstractMap.SimpleEntry<>(0.0, 0L));
             double interval = (finalPoint - initialPoint) / workers;
             double start = initialPoint;
             double end = start + interval;
+            List<Map.Entry<String, WorkerDetails>> availableWorkers = getAvailableWorkers(workers);
 
-            for (int i = 0; i < workers; i++) {
-                Map.Entry<String, WorkerPrx> entry = callbackWorkersList.get(i);
-                entry.getValue().getTask(function, start, end, cantNum);
-                start = end;
-                end = start + interval;
+            if (availableWorkers.size() == workers) {
+                for (Map.Entry<String, WorkerDetails> entry : availableWorkers) {
+                    WorkerDetails workerDetails = entry.getValue();
+                    workerDetails.getWorkerPrx().getTask(function, start, end, cantNum, this.taskIndex);
+                    workerDetails.setBusy(true);
+                    start = end;
+                    end = start + interval;
+                }
+                this.taskIndex += 1;
+            } else {
+                System.out.println("Not enough workers available, try again with less workers.");
             }
-        }).start();
+        });
+        thread.start();
+        return thread;
     }
 
-    public void addPartialResult(double partialResult, long time, Current current) {
-        System.out.println("Partial result received: " + partialResult);
-        System.out.println("Time: " + time + " ms");
-        partialResults += partialResult;
-        totalTime += time;
-        System.out.println("Total partial result until now: " + partialResults);
-        System.out.println("Total time until now: " + totalTime + " ms");
+    private List<Map.Entry<String, WorkerDetails>> getAvailableWorkers(int workers) {
+        List<Map.Entry<String, WorkerDetails>> availableWorkers = new ArrayList<>();
+        for (Map.Entry<String, WorkerDetails> entry : callbackWorkersList) {
+            WorkerDetails workerDetails = entry.getValue();
+            if (!workerDetails.getBusy()) {
+                availableWorkers.add(entry);
+            }
+
+            if (availableWorkers.size() == workers) {
+                break;
+            }
+        }
+        return availableWorkers;
+    }
+
+    public void addPartialResult(double partialResult, long time, int taskIndex, String workerId, Current current) {
+        System.out.println("---------------Results from worker " + workerId + "-----------------");
+        System.out.println("--> Partial result received for task " + taskIndex + ": " + partialResult);
+        System.out.println("--> Time for task " + taskIndex + ": " + time + " ms");
+        Map.Entry<Double, Long> entry = partialResults.get(taskIndex);
+        double currentPartialResult = entry.getKey();
+        long currentTime = entry.getValue();
+        partialResults.set(taskIndex,
+                new java.util.AbstractMap.SimpleEntry<>(currentPartialResult + partialResult, currentTime + time));
+        entry = partialResults.get(taskIndex);
+        System.out.println("--> Total partial result until now for task " + taskIndex + ": " + entry.getKey());
+        System.out.println("--> Total time until now for task " + taskIndex + ": " + entry.getValue() + " ms");
+        System.out.println("------------------------------------------------------------");
+
+        resetWorker(workerId);
+    }
+
+    private void resetWorker(String workerId) {
+        for (Map.Entry<String, WorkerDetails> entry : callbackWorkersList) {
+            if (entry.getKey().equals(workerId)) {
+                WorkerDetails workerDetails = entry.getValue();
+                workerDetails.setBusy(false);
+                break;
+            }
+        }
     }
 }

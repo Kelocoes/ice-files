@@ -38,7 +38,9 @@ public class Worker {
             adapter.activate();
 
             WorkerPrx prx = WorkerPrx.uncheckedCast(obprx);
-            ManageTaskPrx ManageTaskPrx = service.connectWorker(user + ":" + hostname, prx);
+            String workerId = user + ":" + hostname + ":" + args[0];
+            ManageTaskPrx ManageTaskPrx = service.connectWorker(workerId, prx);
+            workerImp.setWorkerId(workerId);
             workerImp.setManageTaskPrx(ManageTaskPrx);
 
             communicator.waitForShutdown();

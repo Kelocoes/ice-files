@@ -11,7 +11,8 @@ public class CLI {
                     break;
                 }
                 
-                System.out.println("\nEnter the function as in Java, example: x^2 + 2*x + 1");
+                System.out.println("-----------------------------------------------");
+                System.out.println("Enter the function as in Java, example: x^2 + 2*x + 1");
                 String function = scanner.nextLine();
 
                 System.out.println("\nEnter the initial point of the definite integral:");
@@ -29,17 +30,37 @@ public class CLI {
                 System.out.println("\n**Processing the integral of the function: " + function + " from " + initialPoint + " to "
                         + finalPoint + " with " + workers + " workers.**\n");
 
-                if (workers > manageTask.callbackWorkersList.size()) {
-                    System.out.println("The number of workers is greater than the number of workers connected.");
-                    System.out.println("The number of workers connected is: " + manageTask.callbackWorkersList.size());
-                    System.out.println("Please connect more workers.");
-                } else {
-                    manageTask.sendIntegral(function, initialPoint, finalPoint, workers, cantNum);
-                    System.out.println("The integral has been sent to the workers.");
+                if (validateFields(manageTask, function, initialPoint, finalPoint, workers, cantNum)) {
+                    Thread thread = manageTask.sendIntegral(function, initialPoint, finalPoint, workers, cantNum);
+                    try {
+                        thread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             } catch (Exception e) {
                 System.out.println("You have made a mistake, please try again.");
             }
         }
+    }
+
+    public boolean validateFields(ManageTask manageTask, String function, double initialPoint, double finalPoint, int workers, int cantNum) {
+        if (function.isEmpty()) {
+            System.out.println("Please instert a function.");
+            return false;
+        }
+
+        if (initialPoint > finalPoint) {
+            System.out.println("The initial point must be less than the final point.");
+            return false;
+        }
+
+        if (workers > manageTask.callbackWorkersList.size()) {
+            System.out.println("The number of workers is greater than the number of workers connected.");
+            System.out.println("The number of workers connected is: " + manageTask.callbackWorkersList.size());
+            System.out.println("Please connect more workers.");
+            return false;
+        }
+        return true;
     }
 }

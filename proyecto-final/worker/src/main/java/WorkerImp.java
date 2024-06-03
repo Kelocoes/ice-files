@@ -1,10 +1,12 @@
 import com.zeroc.Ice.Current;
 
 import Demo.ManageTaskPrx;
+import Demo.WorkerPrx;
 
 public class WorkerImp implements Demo.Worker {
     private ThreadPool threadPool = new ThreadPool();
     ManageTaskPrx manageTaskPrx;
+    String workerId;
 
     public void connectionResponse(String msg, Current current) {
         System.out.println(msg);
@@ -14,18 +16,25 @@ public class WorkerImp implements Demo.Worker {
         this.manageTaskPrx = manageTaskPrx;
     }
 
-    public void getTask(String Function, double start, double end, int cantNum, Current current) {
-        System.out.println("Task received: " + Function + " " + start + " " + end);
+    public void setWorkerId(String workerId) {
+        this.workerId = workerId;
+        System.out.println("Worker saved");
+    }
 
-        try {
-            long startTime = System.currentTimeMillis();
-            double result = threadPool.execute(Function, start, end, cantNum);
-            double partialResult = (end - start) * result / (cantNum * Runtime.getRuntime().availableProcessors());
-            long time = System.currentTimeMillis() - startTime;
-            manageTaskPrx.addPartialResult(partialResult, time);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void getTask(String Function, double start, double end, int cantNum, int taskIndex, Current current) {
+        new Thread(() -> {
+            System.out.println("Task received: " + Function + " " + start + " " + end);
+            try {
+                long startTime = System.currentTimeMillis();
+                double result = threadPool.execute(Function, start, end, cantNum);
+                double partialResult = (end - start) * result / (cantNum * Runtime.getRuntime().availableProcessors());
+                long time = System.currentTimeMillis() - startTime;
+                this.manageTaskPrx.addPartialResult(partialResult, time, taskIndex, this.workerId);
+                System.out.println("Task " + taskIndex + " solved, sending result to master");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
 }
