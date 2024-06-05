@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
+import java.util.AbstractMap;
 
 import Demo.WorkerPrx;
 import Demo.ManageTaskPrx;
@@ -13,7 +14,10 @@ public class ManageTask implements Demo.ManageTask {
     List<Map.Entry<String, WorkerDetails>> callbackWorkersList = new ArrayList<>();
     ManageTaskPrx manageTaskPrx;
     int taskIndex = 0;
+    // List of partial results for each task, double is the partial result and long is the time when started
     List<Map.Entry<Double, Long>> partialResults = new ArrayList<>();
+    // List of workers finished for each task, Integer is the total workers and Integer is the workers finished
+    List<Map.Entry<Integer, Integer>> workersFinished = new ArrayList<>();
 
     ManageTask() {
         callbackWorkersList = new ArrayList<>();
@@ -43,11 +47,12 @@ public class ManageTask implements Demo.ManageTask {
 
     public Thread sendIntegral(String function, double initialPoint, double finalPoint, int workers, int cantNum) {
         Thread thread = new Thread(() -> {
-            partialResults.add(new java.util.AbstractMap.SimpleEntry<>(0.0, 0L));
+            partialResults.add(new java.util.AbstractMap.SimpleEntry<>(0.0, System.currentTimeMillis()));
             double interval = (finalPoint - initialPoint) / workers;
             double start = initialPoint;
             double end = start + interval;
             List<Map.Entry<String, WorkerDetails>> availableWorkers = getAvailableWorkers(workers);
+            workersFinished.add(new java.util.AbstractMap.SimpleEntry<>(workers, 0));
 
             if (availableWorkers.size() == workers) {
                 for (Map.Entry<String, WorkerDetails> entry : availableWorkers) {
@@ -85,14 +90,15 @@ public class ManageTask implements Demo.ManageTask {
         System.out.println("---------------Results from worker " + workerId + "-----------------");
         System.out.println("--> Partial result received for task " + taskIndex + ": " + partialResult);
         System.out.println("--> Time for task " + taskIndex + ": " + time + " ms");
-        Map.Entry<Double, Long> entry = partialResults.get(taskIndex);
-        double currentPartialResult = entry.getKey();
-        long currentTime = entry.getValue();
-        partialResults.set(taskIndex,
-                new java.util.AbstractMap.SimpleEntry<>(currentPartialResult + partialResult, currentTime + time));
-        entry = partialResults.get(taskIndex);
-        System.out.println("--> Total partial result until now for task " + taskIndex + ": " + entry.getKey());
-        System.out.println("--> Total time until now for task " + taskIndex + ": " + entry.getValue() + " ms");
+        Map.Entry<Double, Long> newPartialResult = new AbstractMap.SimpleEntry<>(partialResults.get(taskIndex).getKey() + partialResult, partialResults.get(taskIndex).getValue());
+        partialResults.set(taskIndex, newPartialResult);
+        System.out.println("--> Total partial result until now for task " + taskIndex + ": " + partialResults.get(taskIndex).getKey());
+        Map.Entry<Integer, Integer> newWorkersFinished = new AbstractMap.SimpleEntry<>(workersFinished.get(taskIndex).getKey(), workersFinished.get(taskIndex).getValue() + 1);
+        workersFinished.set(taskIndex, newWorkersFinished);
+        if (workersFinished.get(taskIndex).getValue() == workersFinished.get(taskIndex).getKey()) {
+            long finishTime = System.currentTimeMillis();
+            System.out.println("--> Total time for task " + taskIndex + ": " + (finishTime - partialResults.get(taskIndex).getValue()) + " ms");
+        }
         System.out.println("------------------------------------------------------------");
 
         resetWorker(workerId);

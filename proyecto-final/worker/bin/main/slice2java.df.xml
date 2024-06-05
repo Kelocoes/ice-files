@@ -1,13 +1,13 @@
 <state>
-  <timestamp value='1717175092499' />
+  <timestamp value='1717603733141' />
   <sourceSet name='default'>
     <source name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\Project.ice'>
       <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\Worker.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\Master.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\ManageTask.java' />
       <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\WorkerPrx.java' />
       <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\_WorkerPrxI.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\MasterPrx.java' />
-      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\_MasterPrxI.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\ManageTaskPrx.java' />
+      <file name='C:\Users\GlobE\Desktop\Maestria\Archivos Arquisoft\ice-files\proyecto-final\worker\build\generated-src\Demo\_ManageTaskPrxI.java' />
     </source>
     <arg value='C:\Program Files\ZeroC\Ice-3.7.10\\bin\slice2java.exe' />
     <arg value='-IC:\Program Files\ZeroC\Ice-3.7.10\\slice' />

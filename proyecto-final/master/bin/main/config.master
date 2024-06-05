@@ -1,4 +1,3 @@
 Master.Endpoints=tcp -p 9099
-
-Ice.Default.Host=localhost
+Ice.Default.Host=10.147.20.251
 Ice.ThreadPool.Server.Size=10

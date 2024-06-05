@@ -43,9 +43,15 @@ subprojects {
         manifest {
             attributes(
                 "Main-Class": project.name.capitalize(),
-                "Class-Path": configurations.runtimeClasspath.resolve().collect { it.toURI() }.join(' ') //Windows
-                //"Class-Path": "file:/opt/Ice-3.7.6/lib/ice-3.7.6.jar" // Linux
+                //"Class-Path": configurations.runtimeClasspath.resolve().collect { it.toURI() }.join(' ') //Windows
+                "Class-Path": "file:/opt/Ice-3.7.6/lib/ice-3.7.6.jar" // Linux
             )
         }
+    }
+
+    task deploy(type: Zip) {
+        from configurations.runtimeClasspath
+        from "${buildDir}/libs/${project.name}.jar"
+        destinationDir(file("${buildDir}/deploy")) //java -cp ./* Master
     }
 }

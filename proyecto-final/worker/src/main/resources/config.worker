@@ -1,2 +1,2 @@
 Master.Proxy=ManageTask:tcp -p 9099
-Ice.Default.Host=localhost
+Ice.Default.Host=10.147.20.251
